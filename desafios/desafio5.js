@@ -2,7 +2,7 @@ use aggregations;
 db.movies.aggregate([
   {
     $match: {
-      countries: ["USA"],
+      countries: "USA",
       "tomatoes.viewer.rating": { $gte: 3 },
       cast: { $exists: true }
     }
