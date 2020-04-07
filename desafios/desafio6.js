@@ -2,7 +2,7 @@ use aggregations;
 db.movies.aggregate([
   {
     $match: {
-      awards: { $regex: /Won [0-9] Oscar/ }
+      awards: { $regex: /Won [0-20] Oscar/ }
     }
   },
   {
