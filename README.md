@@ -40,7 +40,7 @@ Então vamos lá aplicar seu conhecimento nesses cenários muito legais! 😉
     mongorestore --db aggregations <caminho_do_arquivo_air_alliances.bson>
     mongorestore --db aggregations <caminho_do_arquivo_air_routes.bson>
     mongorestore --db aggregations <caminho_do_arquivo_trips.bson>
-    
+
     ```
 
 6. Esses comandos criarão um banco de dados chamado `aggregations` com cinco coleções dentro dele. Para confirmar, execute o comando abaixo:
@@ -178,7 +178,7 @@ Sua query deve retornar `47055` documentos. Cada documento no resultado deve ter
 
 ##### Desafio 8
 
-Elabore duas visão consolidadas com duas listas contendo os `top 10` filmes de acordo com o `imdb.rating` e `metacritic`. Considere somente filmes em que os campos `imdb.rating` e `metacritic` são válidos, ou seja, possuem valores maiores que zero. Faça uma única requisição ao banco de dados. 
+Elabore duas visão consolidadas com duas listas contendo os `top 10` filmes de acordo com o `imdb.rating` e `metacritic`. Considere somente filmes em que os campos `imdb.rating` e `metacritic` são válidos, ou seja, possuem valores maiores que zero. Faça uma única requisição ao banco de dados.
 
 
 O resultado da sua query deve ter o seguinte formato:
@@ -288,22 +288,22 @@ E, por fim, a coleção `air_alliances` armazena as companhias aéreas e suas pa
 {
   "_id" : ObjectId("5980bef9a39d0ba3c650ae9d"),
   "name" : "OneWorld",
-  "airlines" : [ 
-    "Air Berlin", 
-    "American Airlines", 
-    "British Airways", 
-    "Cathay Pacific", 
-    "Finnair", 
-    "Iberia Airlines", 
-    "Japan Airlines", 
-    "LATAM Chile", 
-    "LATAM Brasil", 
-    "Malasya Airlines", 
-    "Canadian Airlines", 
-    "Quantas", 
-    "Qatar Airways", 
-    "Royal Jordainian", 
-    "SriLanka Airlines", 
+  "airlines" : [
+    "Air Berlin",
+    "American Airlines",
+    "British Airways",
+    "Cathay Pacific",
+    "Finnair",
+    "Iberia Airlines",
+    "Japan Airlines",
+    "LATAM Chile",
+    "LATAM Brasil",
+    "Malasya Airlines",
+    "Canadian Airlines",
+    "Quantas",
+    "Qatar Airways",
+    "Royal Jordainian",
+    "SriLanka Airlines",
     "S7 Airlines"
   ]
 }
@@ -455,7 +455,7 @@ O resultado da sua query deve ter o seguinte formato:
 
 ##### Desafio 19
 
-Determine qual o dia da semana com maior número de viagens iniciadas. 
+Determine qual o dia da semana com maior número de viagens iniciadas.
 
 Dica: Utilize o operador `$dayOfWeek` para extrair o dia da semana como um número de uma data.
 
@@ -566,13 +566,13 @@ O resultado da sua query deve ter o seguinte formato:
   * Usando o exemplo anterior: `git push -u origin seunome-mongodb-aggregations`
 
 7. Crie um novo `Pull Request` _(PR)_
-  * Vá até a página de _Pull Requests_ do [repositório no GitHub](https://github.com/tryber/sd-01-block26-mongodb-aggregations.git/pulls)
+  * Vá até a página de _Pull Requests_ do [repositório no GitHub](https://github.com/tryber/sd-01-block26-mongodb-aggregations/pulls)
   * Clique no botão verde _"New pull request"_
   * Clique na caixa de seleção _"Compare"_ e escolha a sua branch **com atenção**
   * Clique no botão verde _"Create pull request"_
   * Adicione uma descrição para o _Pull Request_ e clique no botão verde _"Create pull request"_
   * **Não se preocupe em preencher mais nada por enquanto!**
-  * Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-01-block26-mongodb-aggregations.git/pulls) e confira que o seu _Pull Request_ está criado
+  * Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-01-block26-mongodb-aggregations/pulls) e confira que o seu _Pull Request_ está criado
 
 ---
 
@@ -593,7 +593,7 @@ O resultado da sua query deve ter o seguinte formato:
 
 ### Entregáveis
 
-Para entregar o seu projeto você deverá criar um Pull Request neste repositório. Este Pull Request deverá conter os arquivos SQL dos desafios 1 ao 23.
+Para entregar o seu projeto você deverá criar um Pull Request neste repositório. Este Pull Request deverá conter os arquivos js dos desafios 1 ao 23.
 
 Qualquer dúvida, procure a monitoria. Lembre-se que você pode consultar nosso conteúdo sobre Git & GitHub sempre que quiser!
 
