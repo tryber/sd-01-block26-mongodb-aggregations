@@ -20,7 +20,7 @@ Então vamos lá aplicar seu conhecimento nesses cenários muito legais! 😉
 
 ### Instruções para restaurar o banco de dados `aggregations`
 
-1. Faça o download dos aquivos de backup [imdb](/static/back-end/mongodb/imdb.tar.gz), [airlines](/static/back-end/mongodb/airlines.tar.gz) e [citibike](/static/back-end/mongodb/citibike.tar.gz). Clique com botão direito e selecione "Salvar como" para salvar os arquivos em seu computador.
+1. Faça o download dos aquivos de backup [imdb](./imdb.tar.gz), [airlines](./airlines.tar.gz) e [citibike](./citibike.tar.gz). Clique com botão direito e selecione "Salvar como" para salvar os arquivos em seu computador.
 
 2. Abra o terminal e conecte-se à sua instância local do **MongoDB**. Se você receber uma mensagem de erro com uma mensagem como ***Connection refused***, tente reiniciar sua instância ([Veja como fazer isso aqui](https://course.betrybe.com/back-end/mongodb/introduction/#conectando)).
 
