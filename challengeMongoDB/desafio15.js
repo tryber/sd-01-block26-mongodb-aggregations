@@ -1,17 +1,21 @@
 db.trips.aggregate([
   {
-    $set: {
-      anoAtual: { $toInt: { $year: new Date() } } // '$$NOW'
-    }
-  }, //tranformar number long em ano 
+    $match: {birthYear: {$gte: 1990}}
+  },
   {
     $set: {
-      idade: { $subtract: ['$anoAtual', '$birthYear'] }
+      anoAtual: { $toDouble: { $year: '$$NOW' } },
+      nascimento: { $toDouble: '$birthYear' }
+    }
+  }, 
+  {
+    $set: {
+      idade: { $subtract: ['$anoAtual', '$nascimento'] }
     }
   },
   {
     $bucketAuto: {
-      groupBy: '$birthYear',
+      groupBy: '$nascimento',
       buckets: 5,
       output: {
         count: { $sum: 1 }
@@ -20,4 +24,4 @@ db.trips.aggregate([
   }
 ]).pretty()
 
-// codigo quebrado
+// Sem utilizar o $match, o código quebra
