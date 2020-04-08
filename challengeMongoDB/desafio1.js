@@ -6,4 +6,3 @@ db.movies.aggregate([
     languages: {$all: ['English', 'Spanish']}
   }}
 ]);
-// itcount(); para analisar a contagem de arquivos;
