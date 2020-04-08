@@ -1,3 +1,4 @@
+use aggregations;
 db.movies.aggregate([
   {
     $match: { languages: 'English', cast: { $exists: true } }

@@ -1,3 +1,4 @@
+use aggregations;
 db.trips.aggregate([
   {
     $set: {

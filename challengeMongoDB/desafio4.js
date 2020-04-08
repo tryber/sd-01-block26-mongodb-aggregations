@@ -1,3 +1,4 @@
+use aggregations;
 db.movies.aggregate([
   {$set: {
     titulo: {$size: {$split: ['$title', ' ']}}

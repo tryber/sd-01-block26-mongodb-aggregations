@@ -1,3 +1,4 @@
+use aggregations;
 db.trips.aggregate([
   {
     $facet: {
@@ -16,15 +17,13 @@ db.trips.aggregate([
           $group: { _id: 
             { estacacaoId: '$startStationId', estacaoNome: '$startStationName' }, total: { $sum: 1 } }
         }
-
       ],
       estacaoFim: [
         {
           $group: { _id: 
             { estacacaoId: '$endStationId', estacaoNome: '$endStationName' }, total: { $sum: 1 } }
         }
-
       ]
     }
   }
-]).pretty()
+]).pretty();

@@ -1,3 +1,4 @@
+use aggregations;
 // db.trips.aggregate([
 //   {
 //     $set:
@@ -16,6 +17,5 @@
 //   { $sort: { duracaoMedia: -1 } },
 //   { $limit: 5 }
 // ]);
-
 
 // bikeid, stopTime

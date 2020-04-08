@@ -1,3 +1,4 @@
+use aggregations;
 db.trips.aggregate([
   {
     $match: {birthYear: {$gte: 1990}}
@@ -22,6 +23,6 @@ db.trips.aggregate([
       }
     }
   }
-]).pretty()
+]).pretty();
 
 // Sem utilizar o $match, o código quebra
