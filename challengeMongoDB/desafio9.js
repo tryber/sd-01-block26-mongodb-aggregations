@@ -14,17 +14,23 @@ db.movies.aggregate([
       ]
     }
   },
-  // {
-  //   $lookup: {
-  //     from: 'movies',
-  //     localField: 'top10IMDB',
-  //     foreignField: 'top10Metacritic',
-  //     as: 'intersection'
-  //   }
-  // },
 ]).pretty();
 
 // {$unwind: '$top10IMDB'},
 // {$unwind: '$top10Metacritic'},
+// {
+//   $group: {
+//     _id: {top10IMDB: '$top10IMDB.title', top10Metacritic: '$top10Metacritic'}, total: {$sum: 1}
+//   }
+// }
+
+// {
+//   $lookup: {
+//     from: 'movies',
+//     localField: 'top10IMDB',
+//     foreignField: 'top10Metacritic',
+//     as: 'intersection'
+//   }
+// },
 
 //incompleto

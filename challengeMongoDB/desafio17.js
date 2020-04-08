@@ -11,7 +11,7 @@ db.trips.aggregate([
         {
           $match:
           {
-            hourStart: { $in: [6, 7]}
+            hourStart: { $in: [6, 7]} // 8
           }
         },
         {
@@ -26,7 +26,7 @@ db.trips.aggregate([
         {
           $match:
           {
-            hourStop: { $in: [18, 19]}
+            hourStop: { $in: [18, 19]} // 20
           }
         },
         {
