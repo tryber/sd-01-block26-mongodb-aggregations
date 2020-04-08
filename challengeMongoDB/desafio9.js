@@ -4,13 +4,11 @@ db.movies.aggregate([
   {
     $facet: {
       top10IMDB: [
-        { $project: { titulo: '$title', notaIMDB: '$imdb.rating', notaMetacritic: '$metacritic' } },
-        { $sort: { notaIMDB: -1 } },
+        { $sort: { 'imdb.rating': -1 } },
         { $limit: 10 }
       ],
       top10Metacritic: [
-        { $project: { titulo: '$title', notaIMDB: '$imdb.rating', notaMetacritic: '$metacritic' } },
-        { $sort: { notaMetacritic: -1 } },
+        { $sort: { 'metacritic': -1 } },
         { $limit: 10 }
       ]
     }

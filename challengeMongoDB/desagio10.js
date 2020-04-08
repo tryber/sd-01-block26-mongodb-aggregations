@@ -1,20 +1,32 @@
+use aggregations;
 db.movies.aggregate([
   { $match: { 'imdb.rating': { $gte: 0 }, metacritic: { $gte: 0 } } },
   {
     $facet: {
       top10IMDB: [
-        { $project: { titulo: '$title', notaIMDB: '$imdb.rating', notaMetacritic: '$metacritic' } },
-        { $sort: { notaIMDB: -1 } },
+        { $sort: { 'imdb.rating': -1 } },
         { $limit: 10 }
       ],
       top10Metacritic: [
-        { $project: { titulo: '$title', notaIMDB: '$imdb.rating', notaMetacritic: '$metacritic' } },
-        { $sort: { notaMetacritic: -1 } },
+        { $sort: { 'metacritic': -1 } },
         { $limit: 10 }
       ]
     }
   },
   {
-    $project: { filmesEmComum: { $setIntersection: ['$top10IMDB', '$top10Metacritic'] } }
+    $group: {
+      _id: {
+        $setIntersection: ['$top10IMDB', '$top10Metacritic'] }, filmesEmComum: { $sum: 1 
+      } 
+    }
+  }, 
+  {
+    $project: {
+      _id: 0,
+      nome: '$_id.title',
+      anoLancamento: '$_id.year',
+      notaImdb: '$_id.imdb.rating',
+      notaMetacritic: '$_id.metacritic'
+    }
   }
 ]).pretty();
