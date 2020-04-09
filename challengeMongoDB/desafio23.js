@@ -6,25 +6,25 @@ db.trips.aggregate([
       diferencaSegundos: { $subtract: ['$stopTime', '$startTime'] },
     }
   },
+  { $sort: { bikeid: 1, stopTime: 1, endStationLocation: 1, endStationName: 1, } },
   {
-    $group: { 
+    $group: {
       _id: '$bikeid',
-      ultimaViagem: { $last: '$stopTime'},
-      duracaoMediaEmSegundos: { $avg: '$diferencaSegundos' } 
+      ultimaViagem: { $last: '$stopTime' },
+      ultimaLocalizacao: { $last: '$endStationLocation' },
+      ultimaEstacao: { $last: '$endStationName' },
+      duracaoMediaEmSegundos: { $avg: '$diferencaSegundos' }
     }
   },
   { $sort: { duracaoMediaEmSegundos: -1 } },
   { $limit: 5 },
   {
     $project: {
-      _id: 0, bikeId: '$_id',
+      _id: 0,
+      bikeId: '$_id',
       ultimaViagem: 1,
+      ultimaLocalizacao: 1,
+      ultimaEstacao: 1
     }
   }
 ]).pretty();
-
-ultimaLocalizacao: { $last: '$endStationLocation'},
-ultimaEstacao: { $last: '$endStationName'},
-
-ultimaLocalizacao: 1,
-ultimaEstacao: 1

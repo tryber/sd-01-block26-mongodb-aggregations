@@ -11,13 +11,13 @@ db.air_alliances.aggregate([
   },
   { $unwind: '$avioes' },
   {
-    $match: { 'avioes.airplane': { $in: ['380', 747] } }
+    $match: { 'avioes.airplane': { $in: ['380', '747'] } }
   },
   {
     $group: {
       _id: '$avioes.airline.name', totalRotas: { $sum: 1 }
     }
   },
-  { $sort: { total: -1 } },
+  { $sort: { totalRotas: -1 } },
   { $limit: 1 }
 ]);
