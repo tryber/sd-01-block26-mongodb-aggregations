@@ -11,7 +11,7 @@ db.trips.aggregate([
     $group: {
       _id: '$bikeid',
       ultimaViagem: { $last: '$stopTime' },
-      ultimaLocalizacao: { $last: '$endStationLocation' },
+      localizacao: { $last: '$endStationLocation' },
       ultimaEstacao: { $last: '$endStationName' },
       duracaoMediaEmSegundos: { $avg: '$diferencaSegundos' }
     }
@@ -23,8 +23,8 @@ db.trips.aggregate([
       _id: 0,
       bikeId: '$_id',
       ultimaViagem: 1,
-      ultimaLocalizacao: 1,
-      ultimaEstacao: 1
+      'ultimaLocalizacao.localizacao': '$localizacao',
+      'ultimaLocalizacao.ultimaEstacao': '$ultimaEstacao'
     }
   }
 ]).pretty();
