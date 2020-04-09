@@ -1,22 +1,16 @@
 use aggregations;
 db.trips.aggregate([
   {
-    $match: {birthYear: {$gte: 1990}}
+    $match: { birthYear: { $exists: true, $ne: '' } }
   },
   {
     $set: {
-      anoAtual: { $toDouble: { $year: '$$NOW' } },
-      nascimento: { $toDouble: '$birthYear' }
-    }
-  }, 
-  {
-    $set: {
-      idade: { $subtract: ['$anoAtual', '$nascimento'] }
+      idade: { $subtract: [{ $year: '$$NOW' }, { $toInt: '$birthYear' }] }
     }
   },
   {
     $bucketAuto: {
-      groupBy: '$nascimento',
+      groupBy: '$idade',
       buckets: 5,
       output: {
         count: { $sum: 1 }

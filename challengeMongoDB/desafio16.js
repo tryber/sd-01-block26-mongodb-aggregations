@@ -14,15 +14,21 @@ db.trips.aggregate([
       ],
       estacaoInicio: [
         {
-          $group: { _id: 
-            { estacacaoId: '$startStationId', estacaoNome: '$startStationName' }, total: { $sum: 1 } }
-        }
+          $group: {
+            _id:
+              { estacacaoId: '$startStationId', estacaoNome: '$startStationName' }, total: { $sum: 1 }
+          }
+        },
+        { $sort: { total: -1 } }
       ],
       estacaoFim: [
         {
-          $group: { _id: 
-            { estacacaoId: '$endStationId', estacaoNome: '$endStationName' }, total: { $sum: 1 } }
-        }
+          $group: {
+            _id:
+              { estacacaoId: '$endStationId', estacaoNome: '$endStationName' }, total: { $sum: 1 }
+          }
+        },
+        { $sort: { total: -1 } }
       ]
     }
   }

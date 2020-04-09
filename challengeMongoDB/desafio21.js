@@ -1,21 +1,27 @@
 use aggregations;
 db.trips.aggregate([
-  {$match: {startTime: {$gte: ISODate('2016-03-10T00:00:00Z'), $lte: ISODate('2016-03-10T23:59:59Z') }}},
+  { 
+    $match: {
+      startTime: { 
+        $gte: ISODate('2016-03-10T00:00:00Z'), 
+        $lte: ISODate('2016-03-10T23:59:59Z') 
+      } 
+    } 
+  },
   {
-    $set: 
-    { 
-      diferencaSegundos: {$subtract: ['$stopTime', '$startTime']},
-      viagens: 2016
+    $set:
+    {
+      diferencaSegundos: { $subtract: ['$stopTime', '$startTime'] },
     }
   },
   {
-    $group: {_id: '$viagens', duracaoMediaEmSegundos: {$avg: '$diferencaSegundos'}}
+    $group: { _id: null, duracaoMediaEmSegundos: { $avg: '$diferencaSegundos' } }
   },
   {
     $project: {
-      _id: 0, duracaoMediaEmMinutos: {$ceil: {$divide: ['$duracaoMediaEmSegundos', 1000]}}
+      _id: 0, duracaoMediaEmMinutos: { $ceil: { $divide: ['$duracaoMediaEmSegundos', 60000] } }
     }
   }
 ]);
 
-//conferir valores 1061 minutos
+//conferir valores 18 minutos

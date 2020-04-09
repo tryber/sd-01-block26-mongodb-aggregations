@@ -1,25 +1,12 @@
 use aggregations;
 db.trips.aggregate([
-  { $match: { birthYear: { $gt: 0 } } },
+  { $match: { birthYear: { $exists: true, $ne: '' } } },
   {
-    $facet: {
-      maiorAno: [
-        { $sort: { birthYear: -1 } },
-        { $limit: 1 },
-      ],
-      menorAno: [
-        { $sort: { birthYear: 1 } },
-        { $limit: 1 },
-      ]
+    $group: {
+      _id: null,
+      maiorAnoNacimento: { $max: { $toInt: "$birthYear" } },
+      menorAnoNascimento: { $min: { $toInt: "$birthYear" } },
     }
   },
-  {
-    $project: {
-      _id: 0,
-      maiorAnoNascimento: '$maiorAno.birthYear',
-      menorAnoNascimento: '$menorAno.birthYear'
-    }
-  },
-  { $unwind: '$maiorAnoNascimento' },
-  { $unwind: '$menorAnoNascimento' }
+  { $project: { _id: 0 } }
 ]);
