@@ -22,6 +22,4 @@ db.trips.aggregate([
   allowDiskUse:true,
   cursor:{}
  }).pretty();
- // allowDiskUse:true achei isso no stack, mas não sei porque resolveu.
- // Era erro na quantidade de memoria alocada.
  
