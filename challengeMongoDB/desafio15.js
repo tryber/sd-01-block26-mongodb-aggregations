@@ -1,22 +1,20 @@
 use aggregations;
-db.trips.aggregate([
-  {
-    $match: { birthYear: { $exists: true, $ne: '' } }
-  },
-  {
-    $set: {
-      idade: { $subtract: [{ $year: '$$NOW' }, { $toInt: '$birthYear' }] }
-    }
-  },
-  {
-    $bucketAuto: {
-      groupBy: '$idade',
-      buckets: 5,
-      output: {
-        count: { $sum: 1 }
+db.trips.aggregate(
+  [
+    {
+      $match: { birthYear: { $exists: true, $ne: '' } }
+    },
+    {
+      $addFields: {
+        idade: { $subtract: [{ $year: '$$NOW' }, { $toInt: '$birthYear' }] }
+      }
+    },
+    {
+      $bucketAuto: {
+        groupBy: '$idade',
+        buckets: 5,
       }
     }
-  }
-]).pretty();
-
-// Sem utilizar o $match, o código quebra
+  ],
+  { allowDiskUse: true }
+).pretty();
