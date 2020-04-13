@@ -17,6 +17,3 @@ db.movies.aggregate([
     $project: { filmesEmComum: { $size: { $setIntersection: ['$top10IMDB', '$top10Metacritic'] } } }
   }
 ]).pretty();
-
-
-//incompleto

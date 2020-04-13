@@ -23,5 +23,3 @@ db.trips.aggregate([
     }
   }
 ]);
-
-//conferir valores 18 minutos
