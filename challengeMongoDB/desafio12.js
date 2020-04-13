@@ -5,4 +5,4 @@ db.air_alliances.aggregate([
   }
 ]);
 
-// Não consegui entender o 12;
+// Adiado;
