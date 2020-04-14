@@ -32,8 +32,4 @@ db.trips.aggregate([
   },
 ],
 { allowDiskUse: true });
-
 */
-
-
-

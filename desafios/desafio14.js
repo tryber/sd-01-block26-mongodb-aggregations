@@ -23,6 +23,3 @@ db.trips.aggregate([
   }
 ]).pretty();
 */
-
-
-

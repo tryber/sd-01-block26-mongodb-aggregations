@@ -80,6 +80,3 @@ db.trips.aggregate([
   }
 ]).pretty();
 */
-
-
-

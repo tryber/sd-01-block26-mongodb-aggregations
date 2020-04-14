@@ -42,7 +42,3 @@ db.air_alliances.aggregate([
   },
 ]).pretty();
 */
-
-
-
-
