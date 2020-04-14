@@ -1,25 +1,15 @@
 
 /*
-  use aggregations;
-*/
-
+use aggregations;
 
 db.trips.aggregate([
-  {
-    $project: {
-      '_id': 0,
-      'startStationName': 1,
-      'dia': {
-        $dayOfWeek: '$startTime'
-      }
-    }
-  },
   {
     $lookup: {
       from: 'trips',
       pipeline: [
         {
           $project: {
+            '_id': 0,
             'dia': {
               $dayOfWeek: '$startTime'
             }
@@ -40,31 +30,45 @@ db.trips.aggregate([
         },
         {
           $limit: 1
+        },
+        {
+          $project: {
+            '_id': 0,
+            'diaDaSemana': '$_id',
+          }
         }
       ],
-      as: 'high_day'
-    },
-  },
-
-]).pretty()
-
-
-
-use aggregations;
-db.trips.aggregate([
-  {
-    $set: {
-      dayOfWeek: { $dayOfWeek: '$startTime' }
+      as: 'weekday'
     }
   },
   {
-    $group: { _id: {diaSemana: '$dayOfWeek', estacao: '$startStationName'}, total: { $sum: 1 } }
+    $unwind: '$weekday'
+  },
+  {
+    $match: {
+      $expr: {
+        $eq: [{ $dayOfWeek: '$startTime' }, '$weekday.diaDaSemana']
+      }
+    }
+  },
+  {
+    $group: {
+      '_id': { 'name': '$startStationName' },
+      'total': { $sum: 1 }
+    }
+  },
+  {
+    $sort: { total: -1 }
+  },
+  {
+    $limit: 1
   },
   {
     $project: {
-      total: 1, nomeEstacao: '$_id.estacao', _id: 1,
+      '_id': 0,
+      'nomeEstacao': '$_id.name',
+      'total': 1,
     }
-  },
-  { $sort: { total: -1 } },
-  { $limit: 1 }
-]);
+  }
+]).pretty();
+*/
