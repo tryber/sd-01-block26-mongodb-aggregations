@@ -1,5 +1,5 @@
- use aggregations;
-  db.air_alliances.aggregate([
+use aggregations;
+db.air_alliances.aggregate([
   {
     $match: { name: "OneWorld" }
   },
@@ -33,7 +33,7 @@
       "connections.airline.name": 1
     }
   },
-  { $unwind: "$connections" }, 
+  { $unwind: "$connections" },
   {
     $project: {
       isValid: {
