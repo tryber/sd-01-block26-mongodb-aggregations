@@ -18,8 +18,8 @@ db.movies.aggregate([
             notaIMDB: '$imdb.rating'
           }
         },
-
-        { $limit: 10 }],
+        { $limit: 10 }
+      ],
       'top10Metacritic': [
         { $sort: { metacritic: -1 } },
         {
@@ -29,7 +29,8 @@ db.movies.aggregate([
             notaMetacritic: '$metacritic'
           }
         },
-        { $limit: 10 }]
+        { $limit: 10 }
+      ]
     }
   },
 ]).pretty();

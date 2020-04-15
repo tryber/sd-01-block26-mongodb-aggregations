@@ -6,7 +6,6 @@ db.trips.aggregate([
       birthYear: { $exists: true, $ne: "" }
     }
   },
-
   {
     $group:
     {

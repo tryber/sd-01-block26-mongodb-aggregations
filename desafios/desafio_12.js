@@ -11,10 +11,12 @@ db.trips.aggregate([
     {
       maiorViagem: [
         { $sort: { tempo: -1 } },
-        { $limit: 1 }],
+        { $limit: 1 }
+      ],
       menorViagem: [
         { $sort: { tempo: 1 } },
-        { $limit: 1 }]
+        { $limit: 1 }
+      ]
     }
   }
 ]).pretty();
