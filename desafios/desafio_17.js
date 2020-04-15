@@ -1,43 +1,22 @@
+  
 use aggregations;
 db.trips.aggregate([
   {
     $addFields: {
-      horaInicial: { $hour: '$startTime'},
-      horaFinal: { $hour: '$stopTime'}
+      mediaViagem:
+      {
+        $divide: [{ $subtract: ['$stopTime', '$startTime'] },{ $multiply: [ 60 , 60000]}]
+      }
     }
   },
   {
-    $facet: {
-      viagensManha: [
-        {
-          $match:
-          {
-            horaInicial: { $in: [6, 7]} 
-          }
-        },
-        {
-          $group: {
-            _id: { estacaoId: '$startStationId', estacaoNome: '$startStationName' }, total: { $sum: 1 }
-          }
-        },
-        { $sort: { total: -1 } },
-        { $limit: 5 }
-      ],
-      viagensNoite: [
-        {
-          $match:
-          {
-            horaFinal: { $in: [18, 19]}
-          }
-        },
-        {
-          $group: {
-            _id: { estacaoId: '$endStationId', estacaoNome: '$endStationName' }, total: { $sum: 1 }
-          }
-        },
-        { $sort: { total: -1 } },
-        { $limit: 5 }
-      ]
+    $group: {
+      _id: '$usertype', duracaoMedia: { $avg: '$mediaViagem' }
+    }
+  },
+  {
+    $project: {
+      _id: 0, tipo: '$_id', duracaoMedia: {$trunc: ['$duracaoMedia', 2]}
     }
   }
 ]).pretty();

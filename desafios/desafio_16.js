@@ -1,34 +1,42 @@
 use aggregations;
 db.trips.aggregate([
   {
+    $addFields: {
+      horaInicial: { $hour: '$startTime'},
+      horaFinal: { $hour: '$stopTime'}
+    }
+  },
+  {
     $facet: {
-      usuariosPorGenero: [
+      viagensManha: [
         {
-          $group: { _id: '$gender', total: { $sum: 1 } }
-        }
-      ],
-      usuariosPorTipo: [
-        {
-          $group: { _id: '$usertype', total: { $sum: 1 } }
-        }
-      ],
-      estacaoInicio: [
-        {
-          $group: {
-            _id:
-              { estacacaoId: '$startStationId', estacaoNome: '$startStationName' }, total: { $sum: 1 }
+          $match:
+          {
+            horaInicial: { $in: [6, 7]} 
           }
         },
-        { $sort: { total: -1 } }
-      ],
-      estacaoFim: [
         {
           $group: {
-            _id:
-              { estacacaoId: '$endStationId', estacaoNome: '$endStationName' }, total: { $sum: 1 }
+            _id: { estacaoId: '$startStationId', estacaoNome: '$startStationName' }, total: { $sum: 1 }
           }
         },
-        { $sort: { total: -1 } }
+        { $sort: { total: -1 } },
+        { $limit: 5 }
+      ],
+      viagensNoite: [
+        {
+          $match:
+          {
+            horaFinal: { $in: [18, 19]}
+          }
+        },
+        {
+          $group: {
+            _id: { estacaoId: '$endStationId', estacaoNome: '$endStationName' }, total: { $sum: 1 }
+          }
+        },
+        { $sort: { total: -1 } },
+        { $limit: 5 }
       ]
     }
   }

@@ -1,18 +1,28 @@
 use aggregations;
+
+const date = { initial: ISODate('2016-03-10T00:00:00Z'), final: ISODate('2016-03-10T23:59:59Z') };
+
 db.trips.aggregate([
   {
-    $addFields: {
-      diaSemana: { $dayOfWeek: '$startTime' }
+    $match: {
+      startTime: {
+        $gte: date.initial,
+        $lte: date.final
+      }
     }
   },
   {
-    $group: { _id: { diaSemana: '$diaSemana', estacao: '$startStationName' }, total: { $sum: 1 } }
+    $addFields:
+    {
+      diferencaSegundos: { $subtract: ['$stopTime', '$startTime'] },
+    }
+  },
+  {
+    $group: { _id: null, duracaoMediaEmSegundos: { $avg: '$diferencaSegundos' } }
   },
   {
     $project: {
-      nomeEstacao: '$_id.estacao', total: 1, _id: 0
+      _id: 0, duracaoMediaEmMinutos: { $ceil: { $divide: ['$duracaoMediaEmSegundos', 60000] } }
     }
-  },
-  { $sort: { total: -1 } },
-  { $limit: 1 }
+  }
 ]).pretty();

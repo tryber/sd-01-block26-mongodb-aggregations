@@ -1,19 +1,26 @@
 use aggregations;
-db.trips.aggregate([
-  {
-    $match:
+db.trips.aggregate(
+  [
     {
-      birthYear: { $exists: true, $ne: "" }
-    }
-  },
-
-  {
-    $group:
+      $match: { birthYear: { $exists: true, $ne: '' } }
+    },
     {
-      _id: null,
-      maiorAnoNacimento: { $max: { $toInt: "$birthYear" } },
-      menorAnoNascimento: { $min: { $toInt: "$birthYear" } },
+      $addFields: {
+        idade: { $subtract: [{ $year: '$$NOW' }, { $toInt: '$birthYear' }] }
+      }
+    },
+    {
+      $bucketAuto: {
+        groupBy: '$idade',
+        buckets: 5,
+        output: {
+          count: { $sum: 1 }
+        }
+      }
     }
-  },
-  { $project: { _id: 0 } }
-]).pretty();
+  ],
+  {
+    allowDiskUse: true,
+    cursor: {}
+  }
+).pretty();

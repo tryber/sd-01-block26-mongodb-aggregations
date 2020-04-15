@@ -6,11 +6,11 @@ db.trips.aggregate([
     }
   },
   {
-    $group: { _id: '$diaSemana', total: { $sum: 1 } }
+    $group: { _id: { diaSemana: '$diaSemana', estacao: '$startStationName' }, total: { $sum: 1 } }
   },
   {
     $project: {
-      total: 1, diaDaSemana: '$_id', _id: 0
+      nomeEstacao: '$_id.estacao', total: 1, _id: 0
     }
   },
   { $sort: { total: -1 } },

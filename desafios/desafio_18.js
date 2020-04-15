@@ -1,22 +1,18 @@
-  
 use aggregations;
 db.trips.aggregate([
   {
     $addFields: {
-      mediaViagem:
-      {
-        $divide: [{ $subtract: ['$stopTime', '$startTime'] },{ $multiply: [ 60 , 60000]}]
-      }
+      diaSemana: { $dayOfWeek: '$startTime' }
     }
   },
   {
-    $group: {
-      _id: '$usertype', duracaoMedia: { $avg: '$mediaViagem' }
-    }
+    $group: { _id: '$diaSemana', total: { $sum: 1 } }
   },
   {
     $project: {
-      _id: 0, tipo: '$_id', duracaoMedia: {$trunc: ['$duracaoMedia', 2]}
+      total: 1, diaDaSemana: '$_id', _id: 0
     }
-  }
+  },
+  { $sort: { total: -1 } },
+  { $limit: 1 }
 ]).pretty();
