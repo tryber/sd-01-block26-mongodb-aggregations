@@ -33,7 +33,7 @@ db.air_alliances.aggregate([
       "connections.airline.name": 1
     }
   },
-  { $unwind: "$connections" },
+  { $unwind: "$connections" }, 
   {
     $project: {
       isValid: {
