@@ -1,8 +1,17 @@
 use aggregations;
-db.air_alliances.aggregate([
+db.trips.aggregate([
   {
-    $match: { name: 'OneWorld'}
+    $facet: {
+      maiorViagem: [
+        { $set: { viagem: { $subtract: ['$stopTime', '$startTime'] } } },
+        { $sort: {viagem: -1 } },
+        { $limit: 1 }
+      ],
+      menorViagem: [
+        { $set: { viagem: { $subtract: ['$stopTime', '$startTime'] } } },
+        { $sort: {viagem: 1 } },
+        { $limit: 1 }
+      ]
+    }
   }
-]);
-
-// Adiado;
+]).pretty();

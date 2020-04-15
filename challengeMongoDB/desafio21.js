@@ -1,13 +1,5 @@
 use aggregations;
 db.trips.aggregate([
-  { 
-    $match: {
-      startTime: { 
-        $gte: ISODate('2016-03-10T00:00:00Z'), 
-        $lte: ISODate('2016-03-10T23:59:59Z') 
-      } 
-    } 
-  },
   {
     $set:
     {
@@ -15,11 +7,13 @@ db.trips.aggregate([
     }
   },
   {
-    $group: { _id: null, duracaoMediaEmSegundos: { $avg: '$diferencaSegundos' } }
+    $group: { _id: '$bikeid', duracaoMediaEmSegundos: { $avg: '$diferencaSegundos' } }
   },
   {
     $project: {
-      _id: 0, duracaoMediaEmMinutos: { $ceil: { $divide: ['$duracaoMediaEmSegundos', 60000] } }
+      _id: 0, bikeId: '$_id', duracaoMedia: { $ceil: { $divide: ['$duracaoMediaEmSegundos', 60000] } }
     }
-  }
+  },
+  { $sort: { duracaoMedia: -1 } },
+  { $limit: 5 }
 ]);
