@@ -429,6 +429,34 @@ O resultado da sua query deve ter o seguinte formato:
 
 ##### Desafio 22 - Bônus
 
+Você precisa recolher essas 5 bicicletas mais utilizadas. Para isso, determine a localização da última viagem de cada uma delas.
+
+O resultado da sua query deve ter o seguinte formato:
+
+```javascript
+{
+  "bikeId" : 18105,
+  "ultimaViagem" : ISODate("2016-04-13T14:08:00Z"),
+  "ultimaLocalizacao" : {
+    "localizacao" : [
+      {
+        "type" : "Point",
+        "coordinates" : [
+          -73.981933,
+          40.716633
+        ]
+      }
+    ],
+    "ultimaEstacao" : [
+      "NYCBS Depot - DEL"
+    ]
+  }
+}
+// ...
+```
+
+##### Desafio 23 - Bônus
+
 Aplique `$graphLookup` para resolver esse problema.
 
 Agora você trabalha numa agência de viagens e quer encontrar rotas para um cliente! Para esse desafio, você deverá utilizar as coleções `air_airlines`, `air_alliances` e `air_routes`.
@@ -498,34 +526,6 @@ E, por fim, a coleção `air_alliances` armazena as companhias aéreas e suas pa
 Encontre a lista de todos os destinos únicos possíveis, com no máximo uma escala, partindo dos aeroportos da Alemanha (`Germany`), Espanha (`Spain`) ou Canadá (`Canada`) que fazem parte da parceria `OneWorld`. Inclua o destino e quais companhias aéreas atendem esse mesmo local.
 
 Dica: você vai encontrar 158 destinos!
-
-##### Desafio 23 - Bônus
-
-Você precisa recolher essas 5 bicicletas mais utilizadas. Para isso, determine a localização da última viagem de cada uma delas.
-
-O resultado da sua query deve ter o seguinte formato:
-
-```javascript
-{
-  "bikeId" : 18105,
-  "ultimaViagem" : ISODate("2016-04-13T14:08:00Z"),
-  "ultimaLocalizacao" : {
-    "localizacao" : [
-      {
-        "type" : "Point",
-        "coordinates" : [
-          -73.981933,
-          40.716633
-        ]
-      }
-    ],
-    "ultimaEstacao" : [
-      "NYCBS Depot - DEL"
-    ]
-  }
-}
-// ...
-```
 
 ---
 
