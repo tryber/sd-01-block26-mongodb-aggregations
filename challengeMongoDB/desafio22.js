@@ -1,53 +1,33 @@
 use aggregations;
-db.air_alliances.aggregate([
-  {
-    $match: { name: "OneWorld" }
-  },
-  {
-    $graphLookup: {
-      startWith: "$airlines",
-      from: "air_airlines",
-      connectFromField: "name",
-      connectToField: "name",
-      as: "airlines",
-      maxDepth: 0,
-      restrictSearchWithMatch: {
-        country: { $in: ["Germany", "Spain", "Canada"] }
+db.trips.aggregate(
+  [
+    {
+      $set:
+      {
+        diferencaSegundos: { $subtract: ['$stopTime', '$startTime'] },
+      }
+    },
+    { $sort: { bikeid: 1, stopTime: 1 } },
+    {
+      $group: {
+        _id: '$bikeid',
+        ultimaViagem: { $last: '$stopTime' },
+        localizacao: { $last: '$endStationLocation' },
+        ultimaEstacao: { $last: '$endStationName' },
+        duracaoMediaEmSegundos: { $avg: '$diferencaSegundos' }
+      }
+    },
+    { $sort: { duracaoMediaEmSegundos: -1 } },
+    { $limit: 5 },
+    {
+      $project: {
+        _id: 0,
+        bikeId: '$_id',
+        ultimaViagem: 1,
+        'ultimaLocalizacao.localizacao': '$localizacao',
+        'ultimaLocalizacao.ultimaEstacao': '$ultimaEstacao'
       }
     }
-  },
-  {
-    $graphLookup: {
-      startWith: "$airlines.base",
-      from: "air_routes",
-      connectFromField: "dst_airport",
-      connectToField: "src_airport",
-      as: "connections",
-      maxDepth: 1
-    }
-  },
-  {
-    $project: {
-      validAirlines: "$airlines.name",
-      "connections.dst_airport": 1,
-      "connections.airline.name": 1
-    }
-  },
-  { $unwind: "$connections" },
-  {
-    $project: {
-      isValid: {
-        $in: ["$connections.airline.name", "$validAirlines"]
-      },
-      "connections.dst_airport": 1
-    }
-  },
-  {
-    $match: { isValid: true }
-  },
-  {
-    $group: {
-      _id: "$connections.dst_airport"
-    }
-  }
-]);
+  ],
+  { allowDiskUse: true }
+).pretty();
