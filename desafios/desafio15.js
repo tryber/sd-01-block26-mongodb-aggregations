@@ -4,32 +4,64 @@ use aggregations;
 
 db.trips.aggregate([
   {
-    $match: {
-      'birthYear': {
-        $ne: '',
-        $exists: 1,
-      },
-    }
-  },
-  {
-    $project: {
-      '_id': 0,
-      'age': {
-        $subtract: [{ $year: '$$NOW' }, { $toInt: '$birthYear' }]
-      }
-    }
-  },
-  {
-    $bucketAuto: {
-      groupBy: '$age',
-      buckets: 5,
-      output: {
-        'count': {
-          $sum: 1
+    $facet: {
+      'usuariosPorGenero': [
+          {
+            $group: {
+              '_id': '$gender',
+              'total': {
+                $sum: 1
+              }
+            }
+          }
+      ],
+      'usuariosPorTipo': [
+          {
+            $group: {
+              '_id': '$usertype',
+              'total': {
+                $sum: 1
+              }
+            }
+          }
+      ],
+      'estacaoInicio': [
+        {
+            $group: {
+              '_id': {
+                'estacaoId': '$startStationId',
+                'estacaoNome': '$startStationName'
+              },
+              'total': {
+                $sum: 1
+              }
+            }
+        },
+        {
+          $sort: {
+            'total': -1
+          }
         }
-      }
+      ],
+      'estacaoFim': [
+        {
+            $group: {
+              '_id': {
+                'estacaoId': '$endStationId',
+                'estacaoNome': '$endStationName'
+              },
+              'total': {
+                $sum: 1
+              }
+            }
+        },
+        {
+          $sort: {
+            'total': -1
+          }
+        }
+      ]
     }
-  },
-],
-{ allowDiskUse: true });
+  }
+]).pretty();
 */

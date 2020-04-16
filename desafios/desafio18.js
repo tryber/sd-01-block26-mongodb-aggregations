@@ -6,32 +6,32 @@ db.trips.aggregate([
   {
     $project: {
       '_id': 0,
-      'usertype': 1,
-      'duration': {
-        $subtract: [
-          { $hour: '$stopTime' },
-          { $hour: '$startTime'}
-        ]
+      'dia': {
+        $dayOfWeek: '$startTime'
       }
     }
   },
   {
     $group: {
-      '_id': '$usertype',
-      'duracaoMedia': {
-        $avg: '$duration'
-      },
+      '_id': '$dia',
+      'total': {
+        $sum: 1
+      }
     }
+  },
+  {
+    $sort: {
+      'total': -1
+    }
+  },
+  {
+    $limit: 1
   },
   {
     $project: {
       '_id': 0,
-      'tipo': '$_id',
-      'duracaoMedia': {
-        $round: [
-          '$duracaoMedia', 2
-        ]
-      }
+      'diaDaSemana': '$_id',
+      'total': 1,
     }
   }
 ]);

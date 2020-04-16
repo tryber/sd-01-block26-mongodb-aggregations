@@ -4,40 +4,21 @@ use aggregations;
 
 db.trips.aggregate([
   {
-    $addFields: {
-      'tempoViagem': {
-        $subtract: ['$stopTime', '$startTime']
+    $group: {
+      '_id': null,
+      'maiorAnoNascimento': {
+        $max: '$birthYear'
+      },
+      'menorAnoNascimento': {
+        $min: '$birthYear'
       }
     }
   },
   {
-    $facet: {
-      'maiorViagem': [
-        {
-          $sort: {
-            'tempoViagem': -1
-          }
-        },
-        {
-          $limit: 1
-        },
-        {
-          $unset: 'tempoViagem'
-        },
-      ],
-      'menorViagem': [
-        {
-          $sort: {
-            'tempoViagem': 1
-          }
-        },
-        {
-          $limit: 1
-        },
-        {
-          $unset: 'tempoViagem'
-        },
-      ]
+    $project: {
+      '_id': 0,
+      'maiorAnoNascimento': 1,
+      'menorAnoNascimento': 1,
     }
   }
 ]).pretty();

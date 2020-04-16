@@ -4,22 +4,32 @@ use aggregations;
 
 db.trips.aggregate([
   {
-    $group: {
-      '_id': null,
-      'maiorAnoNascimento': {
-        $max: '$birthYear'
+    $match: {
+      'birthYear': {
+        $ne: '',
+        $exists: 1,
       },
-      'menorAnoNascimento': {
-        $min: '$birthYear'
-      }
     }
   },
   {
     $project: {
       '_id': 0,
-      'maiorAnoNascimento': 1,
-      'menorAnoNascimento': 1,
+      'age': {
+        $subtract: [{ $year: '$$NOW' }, { $toInt: '$birthYear' }]
+      }
     }
-  }
-]).pretty();
+  },
+  {
+    $bucketAuto: {
+      groupBy: '$age',
+      buckets: 5,
+      output: {
+        'count': {
+          $sum: 1
+        }
+      }
+    }
+  },
+],
+{ allowDiskUse: true });
 */

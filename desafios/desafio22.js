@@ -16,12 +16,15 @@ db.trips.aggregate([
     $project: {
       '_id': 0,
       'bikeId': '$bikeid',
+      'stopTime': 1,
       'duracaoMedia': {
         $subtract: [
           { $minute: '$stopTime' },
           { $minute: '$startTime'}
         ]
       },
+      'endStationLocation': 1,
+      'endStationName': 1
     }
   },
   {
@@ -32,5 +35,41 @@ db.trips.aggregate([
   {
     $limit: 5,
   },
-]);
+  {
+    $lookup: {
+      from: 'trips',
+      let: {
+        'bikeid': '$bikeId'
+      },
+      pipeline: [
+        {
+          $match: {
+              $expr: {
+                $eq: ['$bikeid', '$$bikeid']
+              }
+          }
+        },
+        {
+          $group: {
+            '_id': null,
+            'newest': {
+              $max: '$stopTime'
+            }
+          }
+        },
+      ],
+      as: 'bikes'
+    },
+  },
+  {
+    $project: {
+      'bikeId': 1,
+      'ultimaViagem': '$bikes.newest',
+      'ultimaLocalizacao': {
+        'localizacao': ['$endStationLocation'],
+        'ultimaEstacao': ['$endStationName']
+      },
+    }
+  }
+]).pretty();
 */

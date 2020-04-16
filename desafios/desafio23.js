@@ -1,75 +1,142 @@
+/*
+Encontre a lista de todos os destinos únicos possíveis,
+com no máximo uma escala,
+partindo dos aeroportos da Alemanha (Germany),
+Espanha (Spain)
+ou Canadá (Canada)
+que fazem parte da parceria OneWorld.
+Inclua o destino
+e quais companhias aéreas atendem esse mesmo local.
+*/
+
 
 /*
-use aggregations;
+  use aggregations;
+*/
 
-db.trips.aggregate([
+
+{
+  $graphLookup: {
+    from: "employees",
+      startWith: "$reportsTo",
+        connectFromField: "reportsTo",
+          connectToField: "name",
+            as: "reportingHierarchy"
+  }
+}
+
+db.air_alliances.aggregate([
   {
     $match: {
-      $expr: {
-        $eq: [{ $year: '$startTime'}, 2016],
-        $eq: [{ $month: '$startTime'}, 3],
-        $eq: [{ $dayOfMonth: '$startTime'}, 10]
+      'name': 'OneWorld',
+    }
+  },
+  {
+    $lookup: {
+      from: 'air_airlines',
+      let: { airlines: '$airlines' },
+      pipeline: [
+        {
+          $match: {
+            $and: [
+              {
+                $expr: {
+                  $in: ['$name', '$$airlines']
+                }
+              },
+              {
+                'country': {
+                  $in: ['Germany', 'Spain', 'Canada']
+                }
+              }
+            ]
+          },
+        }
+      ],
+      as: 'each_airline'
+    }
+  },
+  {
+    $graphLookup: {
+      from: 'air_routes',
+      startWith: '$each_airline.name',
+      connectFromField: 'airline.name',
+      connectToField: 'airline.name',
+      as: 'destiny',
+      maxDepth: 1
+    }
+  },
+  {
+    $project: { 'destiny': 1 }
+  },
+  {
+    $match: {
+      'destiny.stops': { $lte: 1}
+    }
+  },
+  {
+    $unwind: '$destiny'
+  },
+  {
+    $group: {
+      '_id': null,
+      'counting': {
+        $addToSet: '$destiny.dst_airport'
       }
     }
   },
   {
     $project: {
-      '_id': 0,
-      'bikeId': '$bikeid',
-      'stopTime': 1,
-      'duracaoMedia': {
-        $subtract: [
-          { $minute: '$stopTime' },
-          { $minute: '$startTime'}
-        ]
-      },
-      'endStationLocation': 1,
-      'endStationName': 1
+      'hey': {
+        $size: '$counting'
+      }
     }
-  },
+  }
+]).pretty()
+
+
+db.air_alliances.aggregate([
   {
-    $sort: {
-      'duracaoMedia': -1
+    $match: {
+      'name': 'OneWorld',
     }
-  },
-  {
-    $limit: 5,
   },
   {
     $lookup: {
-      from: 'trips',
-      let: {
-        'bikeid': '$bikeId'
-      },
+      from: 'air_airlines',
+      let: { airlines: '$airlines' },
       pipeline: [
         {
           $match: {
-              $expr: {
-                $eq: ['$bikeid', '$$bikeid']
+            $and: [
+              {
+                $expr: {
+                  $in: ['$name', '$$airlines']
+                }
+              },
+              {
+                'country': {
+                  $in: ['Germany', 'Spain', 'Canada']
+                }
               }
-          }
-        },
-        {
-          $group: {
-            '_id': null,
-            'newest': {
-              $max: '$stopTime'
-            }
-          }
-        },
+            ]
+          },
+        }
       ],
-      as: 'bikes'
-    },
+      as: 'each_airline'
+    }
   },
   {
-    $project: {
-      'bikeId': 1,
-      'ultimaViagem': '$bikes.newest',
-      'ultimaLocalizacao': {
-        'localizacao': ['$endStationLocation'],
-        'ultimaEstacao': ['$endStationName']
-      },
+    $graphLookup: {
+      from: 'air_routes',
+      startWith: '$each_airline.name',
+      connectFromField: 'airline.name',
+      connectToField: 'airline.name',
+      as: 'destiny',
+      maxDepth: 1
     }
-  }
-]).pretty();
-*/
+  },
+  {
+    $project: { 'destiny': 1 }
+  },
+]).pretty()
