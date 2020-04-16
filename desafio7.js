@@ -23,4 +23,3 @@ db.movies.aggregate([
     $count:'count'
   }
 ]).pretty();
-
