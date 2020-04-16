@@ -2,8 +2,8 @@ use aggregations;
 db.movies.aggregate([
   {
     $match: {
-      "imdb.rating": { $gt: 0 },
-      "metacritic": { $gt: 0 }
+      "imdb.rating": { $gte: 0 },
+      "metacritic": { $gte: 0 }
     }
   },
   {
@@ -15,12 +15,6 @@ db.movies.aggregate([
         {
           $limit: 10
         },
-        {
-          $project: {
-            titulo: "$title",
-            notaIMDB: "$imdb.rating"
-          }
-        }
       ],
       "top10Metacritic": [
         {
@@ -29,12 +23,6 @@ db.movies.aggregate([
         {
           $limit: 10
         },
-        {
-          $project: {
-            titulo: "$title",
-            notaMetacritic: "$metacritic"
-          }
-        }
       ]
     }
   },
@@ -44,8 +32,7 @@ db.movies.aggregate([
       filmesEmComum: { $sum: 1 }
     }
   },
-  { 
-    $project: { _id: 0, filmesEmComum: 1 } 
+  {
+    $project: { _id: 0, filmesEmComum: 1 }
   }
 ]).pretty();
-
