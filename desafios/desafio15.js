@@ -1,26 +1,45 @@
 use aggregations;
 db.trips.aggregate([
   {
-    $match: {
-      birthYear: {
-        $exists: true,
-        $ne: ""
-      }
-    }
-  },
-  {
-    $set: {
-      idade: {
-        $floor: {
-          $subtract: [{ $year: "$$NOW" }, { $toInt: "$birthYear" }]
+    $facet: {
+      usuariosPorGenero: [
+        {
+          $group: {
+            _id: "$gender",
+            total: { $sum: 1 }
+          }
         }
-      }
+      ],
+      usuariosPorTipo: [
+        {
+          $group: {
+            _id: "$userType",
+            total: { $sum: 1 }
+          }
+        }
+      ],
+      estacaoInicio: [
+        {
+          $group: {
+            _id: {
+              estacaoId: "$startStationId",
+              estacaoNome: "$startStationName"
+            },
+            total: { $sum: 1 }
+          }
+        }
+      ],
+      estacaoFim: [
+        {
+          $group: {
+            _id: {
+              estacaoId: "$endStationId",
+              estacaoNome: "$endStationName"
+            },
+            total: { $sum: 1 }
+          }
+        }
+      ]
     }
-  },
-  {
-    $bucketAuto: {
-      groupBy: "$idade",
-      buckets: 5,
-    }
-  },
+  }
 ]);

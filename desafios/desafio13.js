@@ -1,28 +1,19 @@
 use aggregations;
 db.trips.aggregate([
   {
-    $set: {
-      time: { $subtract: ["$stopTime", "$startTime"] }
+    $match: {
+      birthYear: {
+        $exists: true,
+        $ne: ""
+      }
     }
   },
   {
-    $facet: {
-      maiorViagem: [
-        {
-          $sort: {
-            time: -1
-          }
-        },
-        { $limit: 1 }
-      ],
-      menorViagem: [
-        {
-          $sort: {
-            time: 1
-          }
-        },
-        { $limit: 1 }
-      ]
+    $group: {
+      _id: null,
+      maiorAnoNacimento: { $max: { $toInt: "$birthYear" }},
+      menorAnoNascimento: { $min: { $toInt: "$birthYear" } },
     }
-  }
+  },
+  { $project: { _id: 0 } }
 ]);

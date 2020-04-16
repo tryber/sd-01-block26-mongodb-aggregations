@@ -9,11 +9,19 @@ db.trips.aggregate([
     }
   },
   {
-    $group: {
-      _id: null,
-      maiorAnoNacimento: { $max: { $toInt: "$birthYear" }},
-      menorAnoNascimento: { $min: { $toInt: "$birthYear" } },
+    $addFields: {
+      idade: {
+        $floor: {
+          $subtract: [{ $year: "$$NOW" }, { $toInt: "$birthYear" }]
+        }
+      }
     }
   },
-  { $project: { _id: 0 } }
-]);
+  {
+    $bucketAuto: {
+      groupBy: "$idade",
+      buckets: 5,
+    }
+  }],
+  { allowDiskUse: true}
+);
