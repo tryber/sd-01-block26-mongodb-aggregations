@@ -24,8 +24,8 @@ db.trips.aggregate(
         _id: 0,
         bikeId: '$_id',
         ultimaViagem: 1,
-        'ultimaLocalizacao.localizacao': '$localizacao',
-        'ultimaLocalizacao.ultimaEstacao': '$ultimaEstacao'
+        'ultimaLocalizacao.localizacao': ['$localizacao'],
+        'ultimaLocalizacao.ultimaEstacao': ['$ultimaEstacao']
       }
     }
   ],

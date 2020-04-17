@@ -15,7 +15,7 @@ db.air_alliances.aggregate([
   },
   {
     $group: {
-      _id: '$avioes.airline.name', totalRotas: { $sum: 1 }
+      _id: '$name', totalRotas: { $sum: 1 }
     }
   },
   { $sort: { totalRotas: -1 } },
