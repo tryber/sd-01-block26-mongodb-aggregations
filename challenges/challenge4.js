@@ -1,8 +1,9 @@
 
 use aggregations;
 db.movies.aggregate([
-  {$set: {
-    titulo: {$size: {$split: ['$title', ' ']}}
+  {
+    $set: {
+      titulo: {$size: {$split: ['$title', ' ']}}
     }
   },
   {$match: {titulo: 1}},

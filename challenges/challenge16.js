@@ -2,8 +2,8 @@ use aggregations;
 db.trips.aggregate([
   {
     $addFields: {
-      horaInicial: { $hour: '$startTime'},
-      horaFinal: { $hour: '$stopTime'}
+      hourAm: { $hour: '$startTime'},
+      hourPm: { $hour: '$stopTime'}
     }
   },
   {
@@ -12,7 +12,7 @@ db.trips.aggregate([
         {
           $match:
           {
-            horaInicial: { $in: [6, 7]} 
+            hourAm: { $in: [6, 7]} 
           }
         },
         {
@@ -27,7 +27,7 @@ db.trips.aggregate([
         {
           $match:
           {
-            horaFinal: { $in: [18, 19]}
+            hourPm: { $in: [18, 19]}
           }
         },
         {
