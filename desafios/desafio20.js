@@ -10,7 +10,7 @@ db.trips.aggregate([
         $lte: ISODate('2016-03-10T23:59:59Z') 
       } 
     } 
-  },,
+  },
   {
     $project: {
       '_id': 0,
