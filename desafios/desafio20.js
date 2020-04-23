@@ -3,15 +3,14 @@
 use aggregations;
 
 db.trips.aggregate([
-  {
+ { 
     $match: {
-      $expr: {
-        $eq: [{ $year: '$startTime'}, 2016],
-        $eq: [{ $month: '$startTime'}, 3],
-        $eq: [{ $dayOfMonth: '$startTime'}, 10]
-      }
-    }
-  },
+      startTime: { 
+        $gte: ISODate('2016-03-10T00:00:00Z'), 
+        $lte: ISODate('2016-03-10T23:59:59Z') 
+      } 
+    } 
+  },,
   {
     $project: {
       '_id': 0,
