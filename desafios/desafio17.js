@@ -9,8 +9,8 @@ db.trips.aggregate([
       'usertype': 1,
       'duration': {
         $subtract: [
-          { $hour: '$stopTime' },
-          { $hour: '$startTime'}
+          '$stopTime',
+          '$startTime'
         ]
       }
     }
@@ -29,7 +29,7 @@ db.trips.aggregate([
       'tipo': '$_id',
       'duracaoMedia': {
         $round: [
-          '$duracaoMedia', 2
+          { $hour: '$duracaoMedia' }, 2
         ]
       }
     }
