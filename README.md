@@ -114,7 +114,7 @@ Crie um _pipeline_ que retorne apenas os filmes com o título composto apenas de
 
 Dica: utilize os operadores `$split` e `$size` para te auxiliar.
 
-Sua query deve retornar `8068` documentos.
+Sua query deve retornar `8028` documentos.
 
 ##### Desafio 5
 
@@ -243,6 +243,220 @@ O resultado da sua query deve ter o seguinte formato:
 
 ##### Desafio 12
 
+Nova troca de contexto. Agora vamos trabalhar com dados do **Citibike** da cidade de Nova York!
+
+Dedique alguns minutos analisando a coleção `trips`. Você tem vários dados interessantes ali.
+
+Para esquentar, vamos começar descobrindo qual a viagem mais curta e a mais longa, a partir dos campos `startTime` e `stopTime`, com apenas uma requisição ao banco de dados!
+
+O resultado da sua query deve ter o seguinte formato:
+
+```javascript
+{
+  "maiorViagem" : [
+    // Maior viagem
+  ],
+  "menorViagem" : [
+    // Menor viagem
+  ]
+}
+```
+
+##### Desafio 13
+
+Determine o menor e o maior ano de nascimento. Guarde essa informação, você precisará dela mais tarde.
+
+Não considere documentos com valores vazios (`""`) ou em que o campo não existe!
+
+O resultado da sua query deve ter o seguinte formato:
+
+```javascript
+{ "maiorAnoNascimento" : <ano>, "menorAnoNascimento" : <ano> }
+```
+
+##### Desafio 14
+
+Crie uma visão dividindo os documentos em `5` faixas de idade geradas automaticamente.
+
+Dica: Explore os conversores de tipos para criar um campo com a idade de cada usuário no _pipeline_.
+
+Cada faixa de idade gerada deve ter o seguinte formato:
+
+```javascript
+{ "_id" : { "min" : <min>, "max" : <max> }, "count" : <count> }
+```
+
+##### Desafio 15
+
+Crie uma visão separando a quantidade de viagens por:
+
+* gênero (`gender`)
+* tipo de usuário (`userType`)
+* estação de início (`startStationId` e `startStationName`). Coloque a quantidade em ordem decrescente
+* estação de fim (`endStationId` e `endStationName`). Coloque a quantidade em ordem decrescente
+
+
+O resultado da sua query deve ter o seguinte formato:
+
+```javascript
+{
+  "usuariosPorGenero" : [
+    {
+      "_id" : 2,
+      "total" : 407595
+    },
+    // ...
+  ],
+  "usuariosPorTipo" : [
+    {
+      "_id" : "Subscriber",
+      "total" : 1842667
+    },
+    // ...
+  ],
+  "estacaoInicio" : [
+    {
+      "_id" : {
+        "estacaoId" : 519,
+        "estacaoNome" : "Pershing Square North"
+      },
+      "total" : 25008
+    },
+    // ...
+  ],
+  "estacaoFim"[
+    {
+      "_id" : {
+        "estacaoId" : 3184,
+        "estacaoNome" : "Paulus Hook"
+      },
+      "total" : 1
+    },
+    // ...
+  ]
+}
+```
+
+##### Desafio 16
+
+Crie duas visões: uma demonstrando quais as `5` estações que concentram o maior número de viagens iniciadas entre as `6 e 8 da manhã` e outra demonstrando quais são as `5` estações com mais viagens finalizadas entre as `6 e 8 da noite`.
+
+Dica: explore o operador `$hour` para extrair a hora de uma data.
+
+O resultado da sua query deve ter o seguinte formato:
+
+```javascript
+{
+  "viagensManha" : [
+    {
+      "_id" : {
+        "estacaoId" : 3230,
+        "estacaoNome" : "Penn Station Valet"
+      },
+      "total" : 6653
+    },
+    // ...
+  ],
+  "viagensNoite" : [
+    {
+      "_id" : {
+        "estacaoId" : 519,
+        "estacaoNome" : "Pershing Square North"
+      },
+      "total" : 5412
+    },
+    // ...
+  ]
+}
+```
+
+##### Desafio 17
+
+Encontre a média de viagens por tipo de usuário. Exiba o valor em horas com apenas duas casas decimais.
+
+O resultado da sua query deve ter o seguinte formato:
+
+```javascript
+{ "tipo" : <tipo>, "duracaoMedia" : <duracaoMedia> }
+// ...
+```
+
+##### Desafio 18
+
+Determine qual o dia da semana com maior número de viagens iniciadas.
+
+Dica: Utilize o operador `$dayOfWeek` para extrair o dia da semana como um número de uma data.
+
+O resultado da sua query deve ter o seguinte formato:
+
+```javascript
+{ "diaDaSemana" : <dia_da_semana>, "total" : <total_de_viagens> }
+```
+
+##### Desafio 19
+
+Agora que você já sabe o dia com mais viagens, determine qual estação tem o maior número de viagens nesse dia da semana. Mas, para isso, adicione o que for necessário ao _pipeline_ anterior. Exiba apenas o nome da estação e o total de viagens.
+
+O resultado da sua query deve ter o seguinte formato:
+
+```javascript
+{ "nomeEstacao" : <nome_da_estacao>, "total" : <total_de_viagens> }
+```
+
+##### Desafio 20
+
+Determine a duração média das viagens iniciadas no dia `10/03/2016`, em minutos. Arredonde o resultado para cima.
+
+O resultado da sua query deve ter o seguinte formato:
+
+```javascript
+{ "duracaoMediaEmMinutos" : <duracao_media_em_minutos> }
+```
+
+##### Desafio 21
+
+Baseado na duração média das viagens, determine quais são as `5` bicicletas que foram mais utilizadas. Exiba o resultado em minutos arredondados para cima.
+
+O resultado da sua query deve ter o seguinte formato:
+
+```javascript
+{ "bikeId" : <bike_id>, "duracaoMedia" : <duracao_media> }
+{ "bikeId" : <bike_id>, "duracaoMedia" : <duracao_media> }
+{ "bikeId" : <bike_id>, "duracaoMedia" : <duracao_media> }
+{ "bikeId" : <bike_id>, "duracaoMedia" : <duracao_media> }
+{ "bikeId" : <bike_id>, "duracaoMedia" : <duracao_media> }
+```
+
+##### Desafio 22 - Bônus
+
+Você precisa recolher essas 5 bicicletas mais utilizadas. Para isso, determine a localização da última viagem de cada uma delas.
+
+O resultado da sua query deve ter o seguinte formato:
+
+```javascript
+{
+  "bikeId" : 18105,
+  "ultimaViagem" : ISODate("2016-04-13T14:08:00Z"),
+  "ultimaLocalizacao" : {
+    "localizacao" : [
+      {
+        "type" : "Point",
+        "coordinates" : [
+          -73.981933,
+          40.716633
+        ]
+      }
+    ],
+    "ultimaEstacao" : [
+      "NYCBS Depot - DEL"
+    ]
+  }
+}
+// ...
+```
+
+##### Desafio 23 - Bônus
+
 Aplique `$graphLookup` para resolver esse problema.
 
 Agora você trabalha numa agência de viagens e quer encontrar rotas para um cliente! Para esse desafio, você deverá utilizar as coleções `air_airlines`, `air_alliances` e `air_routes`.
@@ -312,220 +526,6 @@ E, por fim, a coleção `air_alliances` armazena as companhias aéreas e suas pa
 Encontre a lista de todos os destinos únicos possíveis, com no máximo uma escala, partindo dos aeroportos da Alemanha (`Germany`), Espanha (`Spain`) ou Canadá (`Canada`) que fazem parte da parceria `OneWorld`. Inclua o destino e quais companhias aéreas atendem esse mesmo local.
 
 Dica: você vai encontrar 158 destinos!
-
-##### Desafio 13
-
-Nova troca de contexto. Agora vamos trabalhar com dados do **Citibike** da cidade de Nova York!
-
-Dedique alguns minutos analisando a coleção `trips`. Você tem vários dados interessantes ali.
-
-Para esquentar, vamos começar descobrindo qual a viagem mais curta e a mais longa, a partir dos campos `startTime` e `stopTime`, com apenas uma requisição ao banco de dados!
-
-O resultado da sua query deve ter o seguinte formato:
-
-```javascript
-{
-  "maiorViagem" : [
-    // Maior viagem
-  ],
-  "menorViagem" : [
-    // Menor viagem
-  ]
-}
-```
-
-##### Desafio 14
-
-Determine o menor e o maior ano de nascimento. Guarde essa informação, você precisará dela mais tarde.
-
-Não considere documentos com valores vazios (`""`) ou em que o campo não existe!
-
-O resultado da sua query deve ter o seguinte formato:
-
-```javascript
-{ "maiorAnoNascimento" : <ano>, "menorAnoNascimento" : <ano> }
-```
-
-##### Desafio 15
-
-Crie uma visão dividindo os documentos em `5` faixas de idade geradas automaticamente.
-
-Dica: Explore os conversores de tipos para criar um campo com a idade de cada usuário no _pipeline_.
-
-Cada faixa de idade gerada deve ter o seguinte formato:
-
-```javascript
-{ "_id" : { "min" : <min>, "max" : <max> }, "count" : <count> }
-```
-
-##### Desafio 16
-
-Crie uma visão separando a quantidade de viagens por:
-
-* gênero (`gender`)
-* tipo de usuário (`userType`)
-* estação de início (`startStationId` e `startStationName`). Coloque a quantidade em ordem decrescente
-* estação de fim (`endStationId` e `endStationName`). Coloque a quantidade em ordem decrescente
-
-
-O resultado da sua query deve ter o seguinte formato:
-
-```javascript
-{
-  "usuariosPorGenero" : [
-    {
-      "_id" : 2,
-      "total" : 407595
-    },
-    // ...
-  ],
-  "usuariosPorTipo" : [
-    {
-      "_id" : "Subscriber",
-      "total" : 1842667
-    },
-    // ...
-  ],
-  "estacaoInicio" : [
-    {
-      "_id" : {
-        "estacaoId" : 519,
-        "estacaoNome" : "Pershing Square North"
-      },
-      "total" : 25008
-    },
-    // ...
-  ],
-  "estacaoFim"[
-    {
-      "_id" : {
-        "estacaoId" : 3184,
-        "estacaoNome" : "Paulus Hook"
-      },
-      "total" : 1
-    },
-    // ...
-  ]
-}
-```
-
-##### Desafio 17
-
-Crie duas visões: uma demonstrando quais as `5` estações que concentram o maior número de viagens iniciadas entre as `6 e 8 da manhã` e outra demonstrando quais são as `5` estações com mais viagens finalizadas entre as `6 e 8 da noite`.
-
-Dica: explore o operador `$hour` para extrair a hora de uma data.
-
-O resultado da sua query deve ter o seguinte formato:
-
-```javascript
-{
-  "viagensManha" : [
-    {
-      "_id" : {
-        "estacaoId" : 3230,
-        "estacaoNome" : "Penn Station Valet"
-      },
-      "total" : 6653
-    },
-    // ...
-  ],
-  "viagensNoite" : [
-    {
-      "_id" : {
-        "estacaoId" : 519,
-        "estacaoNome" : "Pershing Square North"
-      },
-      "total" : 5412
-    },
-    // ...
-  ]
-}
-```
-
-##### Desafio 18
-
-Encontre a média de viagens por tipo de usuário. Exiba o valor em horas com apenas duas casas decimais.
-
-O resultado da sua query deve ter o seguinte formato:
-
-```javascript
-{ "tipo" : <tipo>, "duracaoMedia" : <duracaoMedia> }
-// ...
-```
-
-##### Desafio 19
-
-Determine qual o dia da semana com maior número de viagens iniciadas.
-
-Dica: Utilize o operador `$dayOfWeek` para extrair o dia da semana como um número de uma data.
-
-O resultado da sua query deve ter o seguinte formato:
-
-```javascript
-{ "diaDaSemana" : <dia_da_semana>, "total" : <total_de_viagens> }
-```
-
-##### Desafio 20
-
-Agora que você já sabe o dia com mais viagens, determine qual estação tem o maior número de viagens nesse dia da semana. Mas, para isso, adicione o que for necessário ao _pipeline_ anterior. Exiba apenas o nome da estação e o total de viagens.
-
-O resultado da sua query deve ter o seguinte formato:
-
-```javascript
-{ "nomeEstacao" : <nome_da_estacao>, "total" : <total_de_viagens> }
-```
-
-##### Desafio 21
-
-Determine a duração média das viagens iniciadas no dia `10/03/2016`, em minutos. Arredonde o resultado para cima.
-
-O resultado da sua query deve ter o seguinte formato:
-
-```javascript
-{ "duracaoMediaEmMinutos" : <duracao_media_em_minutos> }
-```
-
-##### Desafio 22
-
-Baseado na duração média das viagens, determine quais são as `5` bicicletas que foram mais utilizadas. Exiba o resultado em minutos arredondados para cima.
-
-O resultado da sua query deve ter o seguinte formato:
-
-```javascript
-{ "bikeId" : <bike_id>, "duracaoMedia" : <duracao_media> }
-{ "bikeId" : <bike_id>, "duracaoMedia" : <duracao_media> }
-{ "bikeId" : <bike_id>, "duracaoMedia" : <duracao_media> }
-{ "bikeId" : <bike_id>, "duracaoMedia" : <duracao_media> }
-{ "bikeId" : <bike_id>, "duracaoMedia" : <duracao_media> }
-```
-
-##### Desafio 23 - Bônus
-
-Você precisa recolher essas 5 bicicletas mais utilizadas. Para isso, determine a localização da última viagem de cada uma delas.
-
-O resultado da sua query deve ter o seguinte formato:
-
-```javascript
-{
-  "bikeId" : 18105,
-  "ultimaViagem" : ISODate("2016-04-13T14:08:00Z"),
-  "ultimaLocalizacao" : {
-    "localizacao" : [
-      {
-        "type" : "Point",
-        "coordinates" : [
-          -73.981933,
-          40.716633
-        ]
-      }
-    ],
-    "ultimaEstacao" : [
-      "NYCBS Depot - DEL"
-    ]
-  }
-}
-// ...
-```
 
 ---
 
